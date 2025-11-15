@@ -60,7 +60,7 @@ jobs:
           cd OrangeFox_sync/sync
           ./orangefox_sync.sh --branch ${{ github.event.inputs.ORANGEFOX_BRANCH }} --path ~/fox_${{ github.event.inputs.ORANGEFOX_BRANCH }}
 
-                 - name: Add Device Tree to OrangeFox
+      - name: Add Device Tree to OrangeFox
         run: |
           cd ~/fox_${{ github.event.inputs.ORANGEFOX_BRANCH }}
           mkdir -p .repo/local_manifests
@@ -76,7 +76,6 @@ jobs:
     <project path="hardware/oplus" name="crdroidandroid/android_hardware_oplus" remote="github" revision="${{ github.event.inputs.DEVICE_TREE_BRANCH }}" />
 </manifest>
 EOF
-
 
       - name: Sync Device Trees
         run: |
