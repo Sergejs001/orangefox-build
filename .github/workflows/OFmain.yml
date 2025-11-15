@@ -7,22 +7,10 @@ on:
         description: 'OrangeFox Branch'
         required: true
         default: '14.1'
-      DEVICE_TREE_URL:
-        description: 'Device Tree URL'
-        required: true
-        default: 'https://github.com/crdroidandroid/android_device_oneplus_guacamoleb'
-      DEVICE_TREE_BRANCH:
-        description: 'Device Tree Branch'
-        required: true
-        default: '15.0'
       DEVICE_NAME:
         description: 'Device Name'
         required: true
         default: 'guacamoleb'
-      BUILD_TARGET:
-        description: 'Build Target'
-        required: true
-        default: 'omni_guacamoleb-eng'
 
 jobs:
   build:
@@ -60,35 +48,18 @@ jobs:
           cd OrangeFox_sync/sync
           ./orangefox_sync.sh --branch ${{ github.event.inputs.ORANGEFOX_BRANCH }} --path ~/fox_${{ github.event.inputs.ORANGEFOX_BRANCH }}
 
-      - name: Add Device Tree to OrangeFox
+      - name: Download Device Tree
         run: |
           cd ~/fox_${{ github.event.inputs.ORANGEFOX_BRANCH }}
-          mkdir -p .repo/local_manifests
-          cat <<EOF > .repo/local_manifests/guacamoleb.xml
-<?xml version="1.0" encoding="UTF-8"?>
-<manifest>
-    <remote name="github" fetch="https://github.com/" />
-    <project path="device/oneplus/guacamoleb" name="crdroidandroid/android_device_oneplus_guacamoleb" remote="github" revision="${{ github.event.inputs.DEVICE_TREE_BRANCH }}" />
-    <project path="device/oneplus/sm8150-common" name="crdroidandroid/android_device_oneplus_sm8150-common" remote="github" revision="${{ github.event.inputs.DEVICE_TREE_BRANCH }}" />
-    <project path="kernel/oneplus/sm8150" name="crdroidandroid/android_kernel_oneplus_sm8150" remote="github" revision="${{ github.event.inputs.DEVICE_TREE_BRANCH }}" />
-    <project path="vendor/oneplus/guacamoleb" name="crdroidandroid/proprietary_vendor_oneplus_guacamoleb" remote="github" revision="${{ github.event.inputs.DEVICE_TREE_BRANCH }}" />
-    <project path="vendor/oneplus/sm8150-common" name="TheMuppets/proprietary_vendor_oneplus_sm8150-common" remote="github" revision="lineage-22.1" />
-    <project path="hardware/oplus" name="crdroidandroid/android_hardware_oplus" remote="github" revision="${{ github.event.inputs.DEVICE_TREE_BRANCH }}" />
-</manifest>
-EOF
-
-      - name: Sync Device Trees
-        run: |
-          cd ~/fox_${{ github.event.inputs.ORANGEFOX_BRANCH }}
-          repo sync -c -j2 device/oneplus/guacamoleb device/oneplus/sm8150-common kernel/oneplus/sm8150 vendor/oneplus hardware/oplus
+          git clone https://github.com/crdroidandroid/android_device_oneplus_guacamoleb.git device/oneplus/guacamoleb -b 15.0
+          git clone https://github.com/crdroidandroid/android_device_oneplus_sm8150-common.git device/oneplus/sm8150-common -b 15.0
 
       - name: Build OrangeFox Recovery
         run: |
           cd ~/fox_${{ github.event.inputs.ORANGEFOX_BRANCH }}
           source build/envsetup.sh
           export ALLOW_MISSING_DEPENDENCIES=true
-          lunch ${{ github.event.inputs.BUILD_TARGET }}
-          make clean
+          lunch omni_guacamoleb-eng
           make recoveryimage -j2
 
       - name: Upload OrangeFox Recovery
