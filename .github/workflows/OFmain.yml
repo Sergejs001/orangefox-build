@@ -60,7 +60,7 @@ jobs:
           cd OrangeFox_sync/sync
           ./orangefox_sync.sh --branch ${{ github.event.inputs.ORANGEFOX_BRANCH }} --path ~/fox_${{ github.event.inputs.ORANGEFOX_BRANCH }}
 
-            - name: Add Device Tree to OrangeFox
+                 - name: Add Device Tree to OrangeFox
         run: |
           cd ~/fox_${{ github.event.inputs.ORANGEFOX_BRANCH }}
           mkdir -p .repo/local_manifests
@@ -68,14 +68,15 @@ jobs:
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
     <remote name="github" fetch="https://github.com/" />
-    <project path="device/oneplus/guacamoleb" name="crdroidandroid/android_device_oneplus_guacamoleb" remote="github" revision="${{ '{{' }} github.event.inputs.DEVICE_TREE_BRANCH {{ '}}' }}" />
-    <project path="device/oneplus/sm8150-common" name="crdroidandroid/android_device_oneplus_sm8150-common" remote="github" revision="${{ '{{' }} github.event.inputs.DEVICE_TREE_BRANCH {{ '}}' }}" />
-    <project path="kernel/oneplus/sm8150" name="crdroidandroid/android_kernel_oneplus_sm8150" remote="github" revision="${{ '{{' }} github.event.inputs.DEVICE_TREE_BRANCH {{ '}}' }}" />
-    <project path="vendor/oneplus/guacamoleb" name="crdroidandroid/proprietary_vendor_oneplus_guacamoleb" remote="github" revision="${{ '{{' }} github.event.inputs.DEVICE_TREE_BRANCH {{ '}}' }}" />
+    <project path="device/oneplus/guacamoleb" name="crdroidandroid/android_device_oneplus_guacamoleb" remote="github" revision="${{ github.event.inputs.DEVICE_TREE_BRANCH }}" />
+    <project path="device/oneplus/sm8150-common" name="crdroidandroid/android_device_oneplus_sm8150-common" remote="github" revision="${{ github.event.inputs.DEVICE_TREE_BRANCH }}" />
+    <project path="kernel/oneplus/sm8150" name="crdroidandroid/android_kernel_oneplus_sm8150" remote="github" revision="${{ github.event.inputs.DEVICE_TREE_BRANCH }}" />
+    <project path="vendor/oneplus/guacamoleb" name="crdroidandroid/proprietary_vendor_oneplus_guacamoleb" remote="github" revision="${{ github.event.inputs.DEVICE_TREE_BRANCH }}" />
     <project path="vendor/oneplus/sm8150-common" name="TheMuppets/proprietary_vendor_oneplus_sm8150-common" remote="github" revision="lineage-22.1" />
-    <project path="hardware/oplus" name="crdroidandroid/android_hardware_oplus" remote="github" revision="${{ '{{' }} github.event.inputs.DEVICE_TREE_BRANCH {{ '}}' }}" />
+    <project path="hardware/oplus" name="crdroidandroid/android_hardware_oplus" remote="github" revision="${{ github.event.inputs.DEVICE_TREE_BRANCH }}" />
 </manifest>
 EOF
+
 
       - name: Sync Device Trees
         run: |
