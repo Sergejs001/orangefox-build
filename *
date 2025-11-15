@@ -64,7 +64,7 @@ jobs:
         run: |
           cd ~/fox_${{ github.event.inputs.ORANGEFOX_BRANCH }}
           mkdir -p .repo/local_manifests
-          cat > .repo/local_manifests/guacamoleb.xml << 'EOF'
+          cat << 'EOF' > .repo/local_manifests/guacamoleb.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
     <remote name="github" fetch="https://github.com/" />
